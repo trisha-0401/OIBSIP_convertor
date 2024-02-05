@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      padding: 20px;
+    }
+
+    .inputs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px;
+    }
+
+    .input-group label {
+      font-size: 16px;
+      font-weight: normal;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .input-group input {
+      width: 100px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .input-group input[type=range] {
+      width: 150px;
+    }
+
+    .buttons {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .buttons button {
+      width: 100px;
+      height: 40px;
+      border: none;
+      border-radius: 10px;
+      background-color: #333;
+      color: #fff;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .buttons button:hover {
+      background-color: #555;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">Temperature Converter</h1>
+    <div class="inputs">
+      <div class="input-group">
+        <label for="celsius">Celsius</label>
+        <input type="number" id="celsius" min="-273.15" max="1000">
+        <input type="range" id="celsius-slider" min="-273.15" max="1000" step="0.01">
+      </div>
+      <div class="input-group">
+        <label for="fahrenheit">Fahrenheit</label>
+        <input type="number" id="fahrenheit" min="-459.67" max="1832">
+        <input type="range" id="fahrenheit-slider" min="-459.67" max="1832" step="0.01">
+      </div>
+      <div class="input-group">
+        <label for="kelvin">Kelvin</label>
+        <input type="number" id="kelvin" min="0" max="1273.15">
+        <input type="range" id="kelvin-slider" min="0" max="1273.15" step="0.01">
+      </div>
+    </div>
+    <div class="buttons">
+      <button id="clear">Clear</button>
+    </div>
+  </div>
+
+  <script>
+    // Get the input elements
+    let celsius = document.getElementById("celsius");
+    let fahrenheit = document.getElementById("fahrenheit");
+    let kelvin = document.getElementById("kelvin");
+    let celsiusSlider = document.getElementById("celsius-slider");
+    let fahrenheitSlider = document.getElementById("fahrenheit-slider");
+    let kelvinSlider = document.getElementById("kelvin-slider");
+    let clearButton = document.getElementById("clear");
+
+    // Define the conversion formulas
+    function cToF(c) {
+      return (c * 9/5) + 32;
+    }
+
+    function cToK(c) {
+      return c + 273.15;
+    }
+
+    function fToC(f) {
+      return (f - 32) * 5/9;
+    }
+
+    function fToK(f) {
+      return (f - 32) * 5/9 + 273.15;
+    }
+
+    function kToC(k) {
+      return k - 273.15;
+    }
+
+    function kToF(k) {
+      return (k - 273.15) * 9/5 + 32;
+    }
+
+    // Define the conversion function
+    function convert(unit) {
+      // Get the value of the input
+      let value = parseFloat(document.getElementById(unit).value);
+
+      // Check if the value is valid
+      if (!isNaN(value)) {
+        // Convert the value based on the unit
+        switch (unit) {
+          case 'celsius':
+            fahrenheit.value = cToF(value).toFixed(2);
+            kelvin.value = cToK(value).toFixed(2);
+            fahrenheitSlider.value = cToF(value).toFixed(2);
+            kelvinSlider.value = cToK(value).toFixed(2);
+            break;
+          case 'fahrenheit':
+            celsius.value = fToC(value).toFixed(2);
+            kelvin.value = fToK(value).toFixed(2);
+            celsiusSlider.value = fToC(value).toFixed(2);
+            kelvinSlider.value = fToK(value).toFixed(2);
+            break;
+          case 'kelvin':
+            celsius.value = kToC(value).toFixed(2);
+            fahrenheit.value = kToF(value).toFixed(2);
+            celsiusSlider.value = kToC(value).toFixed(2);
+            fahrenheitSlider.value = kToF(value).toFixed(2);
+            break;
+        }
+      }
+    }
+
+    // Define the clear function
+    function clear() {
+      // Clear all the inputs
+      celsius.value = "";
+      fahrenheit.value = "";
+      kelvin.value = "";
+      celsiusSlider.value = "";
+      fahrenheitSlider.value = "";
+      kelvinSlider.value = "";
+    }
+
+    // Add event listeners to the inputs and buttons
+    celsius.addEventListener("input", function() {
+      convert("celsius");
+    });
+    fahrenheit.addEventListener("input", function() {
+      convert("fahrenheit");
+    });
+    kelvin.addEventListener("input", function() {
+      convert("kelvin");
+    });
+    celsiusSlider.addEventListener("input", function() {
+      celsius.value = celsiusSlider.value;
+      convert("celsius");
+    });
+    fahrenheitSlider.addEventListener("input", function() {
+      fahrenheit.value = fahrenheitSlider.value;
+      convert("fahrenheit");
+    });
+    kelvinSlider.addEventListener("input", function() {
+      kelvin.value = kelvinSlider.value;
+      convert("kelvin");
+    });
+    clearButton.addEventListener("click", function() {
+      clear();
+    });
+  </script>
+</body>
+</html>
